@@ -1,36 +1,57 @@
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
+import Todo from "./components/Todo";
 
-const ACTIONS = {
-  INCREMENT: "increment",
-  DECREMENT: "decrement",
+export const ACTIONS = {
+  ADD_TODO: "add-todo",
+  TOGGLE_TODO: "toggle-todo",
+  DELETE_TODO: "delete-todo",
 };
 
+function newTodo(work) {
+  return { id: Date.now(), todo: work, completed: false };
+}
 function reducer(state, action) {
   switch (action.type) {
-    case ACTIONS.INCREMENT:
-      return { count: state.count + 1 };
-    case ACTIONS.DECREMENT:
-      return { count: state.count - 1 };
+    case ACTIONS.ADD_TODO:
+      return [...state, newTodo(action.payload.work)];
+    case ACTIONS.TOGGLE_TODO:
+      return state.map((todo) => {
+        if (todo.id === action.payload.id) {
+          return { ...todo, completed: !todo.completed };
+        }
+        return todo;
+      });
+    case ACTIONS.DELETE_TODO:
+      return state.filter((todo) => todo.id !== action.payload.id);
+
     default:
       return state;
   }
 }
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, { count: 0 });
+  const [todos, dispatch] = useReducer(reducer, []);
 
-  const increment = () => {
-    dispatch({ type: ACTIONS.INCREMENT });
+  const [work, setWork] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch({ type: ACTIONS.ADD_TODO, payload: { work: work } });
+    setWork("");
   };
 
-  const decrement = () => {
-    dispatch({ type: ACTIONS.DECREMENT });
-  };
   return (
     <>
-      <button onClick={decrement}>-</button>
-      <span>{state.count}</span>
-      <button onClick={increment}>+</button>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={work}
+          onChange={(e) => setWork(e.target.value)}
+        />
+      </form>
+      {todos.map((todo) => {
+        return <Todo key={todo.id} todo={todo} dispatch={dispatch} />;
+      })}
     </>
   );
 }
