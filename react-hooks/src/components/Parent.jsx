@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import { ThemeContext } from "../context/themeContext";
+import React from "react";
+import { useTheme } from "../context/themeContext";
 const Parent = () => {
-  const value = useContext(ThemeContext);
-  console.log("Cotext Value", value);
+  const value = useTheme();
+  console.log("Context Value", value);
   return (
     <>
       <div>Parent</div>
