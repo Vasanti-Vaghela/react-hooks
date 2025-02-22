@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
-import { ThemeContext } from "../App";
-
+import { ThemeContext } from "../context/themeContext";
 const Parent = () => {
   const value = useContext(ThemeContext);
   console.log("Cotext Value", value);
