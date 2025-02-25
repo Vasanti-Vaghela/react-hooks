@@ -2,7 +2,7 @@ import React from "react";
 import { useTheme } from "../context/themeContext";
 const Parent = () => {
   const value = useTheme();
-  console.log("Context Value", value);
+  // console.log("Context Value", value);
   return (
     <>
       <div>Parent</div>
